@@ -84,20 +84,25 @@ class Chart:
         self.max_raw = (0, 0)
         self.min_raw = (0, 0)
 
-    def add_datapoint(self, x: int, y: int, series_id: str = '1'):
+    def add_datapoint(self, x: int, y: int, series_id: str = '1') -> None:
+        """
+        Add a datapoint to the indicated Series
 
-        # which series will this data point be added to?
-
+        :param x: x value
+        :param y: y value
+        :param series_id: best to make the series_id values a single character, rather than a full string, since they are also
+        used to plot that particular series
+        """
         # if there is not already a series with the passed series_id, create a new one
         if series_id not in self.series_dict.keys():
             self.series_dict[series_id] = Series()
 
-        # get the desired Series
+        # get the desired Series, and add the datapoint to it
         point = (x, y)
         s = self.series_dict[series_id]
         s.point_list.append(point)
 
-    def draw(self):
+    def draw(self) -> None:
 
         # find_bounds()
         self.find_bounds()
@@ -109,8 +114,12 @@ class Chart:
         for ll in self.lines:
             print(ll)
 
-    def find_bounds(self):
-
+    def find_bounds(self) -> None:
+        """
+        Walk the list of Series and then each list of datapoints, to find
+        the raw values maxima and minima, for use in scaling the raw data
+        onto the plotting surface
+        """
         # start with the 0-th point in the 0-th graph
         series_id_list = list(self.series_dict.keys())
         if len(series_id_list) > 0:
@@ -129,6 +138,7 @@ class Chart:
                 x = point[0]
                 y = point[1]
 
+                # preserve the maximum and minimum x and y values
                 if x > self.max_raw[0]:
                     self.max_raw = (x, self.max_raw[1])
                 if y > self.max_raw[1]:
