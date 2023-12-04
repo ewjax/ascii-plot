@@ -7,10 +7,10 @@ import copy
 # (0,0) screen origin is in the upper left corner
 # 
 #    **************************************************************
-#    *                      |                                     *
-#    *                   plotOffset.y                             *
-#    *                      |                                     *
-#    *                      |                                     *
+#    *                         |                                  *
+#    *                      plotOffset.y                          *
+#    *                         |                                  *
+#    *                         |                                  *
 #    *                  *************************************     *
 #    * plotOffset.x     *   |                               *     *
 #    *------------------*   |                               *     *
@@ -40,14 +40,6 @@ class Series:
         # create empty list of points
         self.point_list = list()
 
-    # def __init__(self, series_id: str):
-    #     # what character is used to identify this series, and also to plot this series
-    #     # best to make this a single character, rather than a full string
-    #     self.series_id = series_id
-    #
-    #     # create empty list of points
-    #     self.point_list = list()
-
 
 class Chart:
     """
@@ -55,9 +47,9 @@ class Chart:
 
     Chart has many Series, each of which has many tuples of (x, y) raw data points
     """
-    series_dict: dict[str, Series]
 
     # type declaration
+    series_dict: dict[str, Series]
 
     def __init__(self):
 
@@ -72,8 +64,8 @@ class Chart:
         # the plotting surface will be offset 11 columns from the left, and 3 rows from the top
         self.plot_offset = (11, 3)
 
-        num_cols = self.plot_range[0]
-        num_rows = self.plot_range[1]
+        num_cols = self.plot_range[0] + self.plot_offset[0] + 5
+        num_rows = self.plot_range[1] + self.plot_offset[1] + 5
 
         # the array of lines where we will 'draw' the plotted data
         self.lines = []
@@ -88,12 +80,16 @@ class Chart:
         for i in range(num_rows):
             self.lines.append(copy.copy(blank_line))
 
+        # create a pair of points to use for scaling, to hold the maxima and minima of all Series
+        self.max_raw = (0, 0)
+        self.min_raw = (0, 0)
+
     def add_datapoint(self, x: int, y: int, series_id: str = '1'):
 
         # which series will this data point be added to?
 
         # if there is not already a series with the passed series_id, create a new one
-        if series_id not in self.series_dict:
+        if series_id not in self.series_dict.keys():
             self.series_dict[series_id] = Series()
 
         # get the desired Series
@@ -104,6 +100,8 @@ class Chart:
     def draw(self):
 
         # find_bounds()
+        self.find_bounds()
+
         # draw_axes()
         # draw each series
 
@@ -111,11 +109,37 @@ class Chart:
         for ll in self.lines:
             print(ll)
 
-
     def find_bounds(self):
 
-        pass
+        # start with the 0-th point in the 0-th graph
+        series_id_list = list(self.series_dict.keys())
+        if len(series_id_list) > 0:
+            series = self.series_dict[series_id_list[0]]
+            if len(series.point_list) > 0:
+                self.max_raw = series.point_list[0]
+                self.min_raw = series.point_list[0]
 
+        # walk the dict of Series
+        for series_id in series_id_list:
+            series = self.series_dict[series_id]
+            # print(series.point_list)
+
+            # walk the list of datapoints
+            for point in series.point_list:
+                x = point[0]
+                y = point[1]
+
+                if x > self.max_raw[0]:
+                    self.max_raw = (x, self.max_raw[1])
+                if y > self.max_raw[1]:
+                    self.max_raw = (self.max_raw[0], y)
+
+                if x < self.min_raw[0]:
+                    self.min_raw = (x, self.min_raw[1])
+                if y < self.min_raw[1]:
+                    self.min_raw = (self.min_raw[0], y)
+
+        # print(self.max_raw, self.min_raw)
 
 
 def main():
