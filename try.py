@@ -7,12 +7,10 @@ from operator import itemgetter
 #
 def main():
 
-
     point1 = (1, 2)
     point2 = (3, 6)
     point3 = (5, 4)
     point4 = (-1, 3)
-
 
     points = list()
 
@@ -35,8 +33,6 @@ def main():
         x, y = p
         print(f'x = {x}, y = {y}')
 
-
-
     # find maxes and mins
     maxx = max(points, key=itemgetter(0))
     minx = min(points, key=itemgetter(0))
@@ -57,8 +53,6 @@ def main():
     print(f'min y: {miny[1]}')
 
     # sorts
-
-
     sorted_x = sorted(points, key=itemgetter(0))
     sorted_y = sorted(points, key=itemgetter(1))
 
@@ -68,10 +62,5 @@ def main():
     print(f'sorted on y: {sorted_y}')
 
 
-
-
-
-
 if __name__ == '__main__':
     main()
-
