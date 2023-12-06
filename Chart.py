@@ -85,6 +85,11 @@ class Chart:
         self.max_raw = (0, 0)
         self.min_raw = (0, 0)
 
+        # labels
+        self.title = 'This is the Chart Title'
+        self.xlabel = 'This is the X-Axis Label'
+        self.ylabel = 'This is the Y-Axis Label'
+
     def add_datapoint(self, x: int, y: int, series_id: str = '1') -> None:
         """
         Add a datapoint to the indicated Series
@@ -186,31 +191,50 @@ class Chart:
     def draw_axes(self):
 
         # do graph title
-        # todo - add accessor to title
-        title = 'This is the chart title'
-        self.draw_string(self.plot_offset[0] + round((self.plot_range[0] - len(title)) / 2),
+        # todo - add accessor for title
+        self.draw_string(self.plot_offset[0] + round((self.plot_range[0] - len(self.title)) / 2),
                          self.plot_offset[1] - 2,
-                         title)
+                         self.title)
 
         # do x-axis label
-        # todo - add accessor to xlabel
-        xlabel = 'This is the X-Axis Label'
-        self.draw_string(self.plot_offset[0] + round((self.plot_range[0] - len(xlabel)) / 2),
+        # todo - add accessor for xlabel
+        self.draw_string(self.plot_offset[0] + round((self.plot_range[0] - len(self.xlabel)) / 2),
                          self.plot_offset[1] + self.plot_range[1] + 2,
-                         xlabel)
+                         self.xlabel)
 
         # do y-axis label
-        # todo - add accessor to ylabel
-        ylabel = 'This is the Y-Axis Label'
-        for i in range(len(ylabel)):
-            plot_char = ylabel[i]
+        # todo - add accessor for ylabel
+        for i in range(len(self.ylabel)):
+            plot_char = self.ylabel[i]
             self.draw_string(self.plot_offset[0] - 5,
-                             self.plot_offset[1] + round((self.plot_range[1] - len(ylabel))/2) + i,
+                             self.plot_offset[1] + round((self.plot_range[1] - len(self.ylabel))/2) + i,
                              plot_char)
 
         # do the range labels
         # each label will be in the form +1.23e+45
-        # todo - range labels here
+        # x-min label
+        label = f'{self.min_raw[0]:.2E}'
+        self.draw_string(self.plot_offset[0],
+                         self.plot_offset[1] + self.plot_range[1] + 1,
+                         label)
+
+        # x-max label
+        label = f'{self.max_raw[0]:.2E}'
+        self.draw_string(self.plot_offset[0] + self.plot_range[0] + 1 - len(label),
+                         self.plot_offset[1] + self.plot_range[1] + 1,
+                         label)
+
+        # y-min label
+        label = f'{self.min_raw[1]:.2E}'
+        self.draw_string(self.plot_offset[0] - len(label),
+                         self.plot_offset[1] + self.plot_range[1],
+                         label)
+
+        # y-max label
+        label = f'{self.max_raw[1]:.2E}'
+        self.draw_string(self.plot_offset[0] - len(label),
+                         self.plot_offset[1],
+                         label)
 
         # do top/bottom lines
         # outer_horiz_line = '='
@@ -260,6 +284,16 @@ class Chart:
                 self.draw_string(self.plot_offset[0] + x,
                                  screen_zero_y,
                                  axis_horiz_line)
+
+        # horiz and vertical axis intersection
+        if ((self.min_raw[1] < 0.0) and
+                (self.max_raw[1] > 0.0) and
+                (self.min_raw[0] < 0.0) and
+                (self.max_raw[0] > 0.0)):
+            axis_center = '+'
+            self.draw_string(screen_zero_x,
+                             screen_zero_y,
+                             axis_center)
 
 
 def main():
