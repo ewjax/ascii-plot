@@ -73,6 +73,7 @@ class Chart:
         # create a blank line
         blank_line = ''
         blank_char = '.'
+        # blank_char = ' '
         for i in range(num_cols):
             blank_line += blank_char
 
@@ -108,6 +109,7 @@ class Chart:
         self.find_bounds()
 
         # draw_axes()
+        self.draw_axes()
         # draw each series
 
         # print them to the screen
@@ -151,21 +153,138 @@ class Chart:
 
         # print(self.max_raw, self.min_raw)
 
+    def transform(self, raw_x: float, raw_y: float) -> tuple:
+        """
+        Transform a raw (x, y) floating point data pair into the (row, col) integer screen positions
+
+        :param raw_x:
+        :param raw_y:
+        :return: a tuble with the transformed (x, y) data
+        """
+        transform_x = round(self.plot_offset[0] +
+                            self.plot_range[0] * (raw_x - self.min_raw[0]) /
+                            (self.max_raw[0] - self.min_raw[0])
+                            )
+
+        transform_y = round(self.plot_offset[1] +
+                            self.plot_range[1] * (1.0 - (raw_y - self.min_raw[1]) /
+                            (self.max_raw[1] - self.min_raw[1]))
+                            )
+
+        return transform_x, transform_y
+
+    def draw_string(self, x: int, y: int, the_string: str) -> None:
+        """
+        Draw a character at position (x, y)
+        x and y values are assumed to already be transformed to screen coordinates
+        :param x:
+        :param y:
+        :param the_string:
+        """
+        self.lines[y] = self.lines[y][:x] + the_string + self.lines[y][x + len(the_string):]
+
+    def draw_axes(self):
+
+        # do graph title
+        # todo - add accessor to title
+        title = 'This is the chart title'
+        self.draw_string(self.plot_offset[0] + round((self.plot_range[0] - len(title)) / 2),
+                         self.plot_offset[1] - 2,
+                         title)
+
+        # do x-axis label
+        # todo - add accessor to xlabel
+        xlabel = 'This is the X-Axis Label'
+        self.draw_string(self.plot_offset[0] + round((self.plot_range[0] - len(xlabel)) / 2),
+                         self.plot_offset[1] + self.plot_range[1] + 2,
+                         xlabel)
+
+        # do y-axis label
+        # todo - add accessor to ylabel
+        ylabel = 'This is the Y-Axis Label'
+        for i in range(len(ylabel)):
+            plot_char = ylabel[i]
+            self.draw_string(self.plot_offset[0] - 5,
+                             self.plot_offset[1] + round((self.plot_range[1] - len(ylabel))/2) + i,
+                             plot_char)
+
+        # do the range labels
+        # each label will be in the form +1.23e+45
+        # todo - range labels here
+
+        # do top/bottom lines
+        # outer_horiz_line = '='
+        outer_horiz_line = '*'
+        for x in range(self.plot_range[0] + 1):
+            # top line
+            self.draw_string(self.plot_offset[0] + x,
+                             self.plot_offset[1],
+                             outer_horiz_line)
+
+            # bottom line
+            self.draw_string(self.plot_offset[0] + x,
+                             self.plot_offset[1] + self.plot_range[1],
+                             outer_horiz_line)
+
+        # do side lines
+        # outer_vert_line = '|'
+        outer_vert_line = '*'
+        for y in range(0, self.plot_range[1] + 1):
+            # left side
+            self.draw_string(self.plot_offset[0],
+                             self.plot_offset[1] + y,
+                             outer_vert_line)
+
+            # right side
+            self.draw_string(self.plot_offset[0] + self.plot_range[0],
+                             self.plot_offset[1] + y,
+                             outer_vert_line)
+
+        # do the 0 axes, if in range
+        (screen_zero_x, screen_zero_y) = self.transform(0.0, 0.0)
+
+        # vertical axis
+        # axis_vertical_line = '/'
+        axis_vertical_line = '|'
+        if (self.min_raw[0] < 0.0) and (self.max_raw[0] > 0.0):
+            for y in range(1, self.plot_range[1]):
+                self.draw_string(screen_zero_x,
+                                 self.plot_offset[1] + y,
+                                 axis_vertical_line)
+
+        # horiz axis
+        # axis_horiz_line = '+'
+        axis_horiz_line = '-'
+        if (self.min_raw[1] < 0.0) and (self.max_raw[1] > 0.0):
+            for x in range(1, self.plot_range[0]):
+                self.draw_string(self.plot_offset[0] + x,
+                                 screen_zero_y,
+                                 axis_horiz_line)
+
 
 def main():
 
     c = Chart()
 
-    c.add_datapoint(1, 2)
-    c.add_datapoint(3, 6)
-    c.add_datapoint(5, 4)
-    c.add_datapoint(-1, 3)
+    # c.add_datapoint(1, 2)
+    # c.add_datapoint(3, 6)
+    # c.add_datapoint(5, 4)
+    # c.add_datapoint(-1, 3)
+    #
+    # c.add_datapoint(11, 21, '2')
+    # c.add_datapoint(31, 61, '2')
+    # c.add_datapoint(51, 41, '2')
 
-    c.add_datapoint(11, 21, '2')
-    c.add_datapoint(31, 61, '2')
-    c.add_datapoint(51, 41, '2')
+    for i in range(-5, 5):
+        c.add_datapoint(i, i)
+        c.add_datapoint(i, -2*i, '2')
 
     c.draw()
+
+    # (x,y) = c.transform(0, 0)
+    #
+    # c.draw_char(x, y, '+')
+    # c.draw()
 
 
 if __name__ == '__main__':

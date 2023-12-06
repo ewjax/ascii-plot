@@ -61,6 +61,34 @@ def main():
     print(f'sorted on x: {sorted_x}')
     print(f'sorted on y: {sorted_y}')
 
+    base_str = 'abcdefghijklmnopqrstuvwxyz'
+    print(f'base = {base_str}')
+    n = 7
+    new_char = '-'
+
+    # method 1 - covert string to list, do mods, convert back to string
+    print('method 1 ----------------')
+    test_str = base_str
+    test_list = list(test_str)
+    print(f'test_str      = {test_str}')
+    print(f'test_list     = {test_list}')
+
+    test_list[n] = new_char
+    print(f'mod test_list = {test_list}')
+
+    test_str = ''.join(test_list)
+    print(f'mod test_str  = {test_str}')
+
+    # method 2
+    print('method 2 ----------------')
+    test_str = base_str
+    print(f'test_str      = {test_str}')
+
+    test_str = test_str[:n] + new_char + test_str[n+len(new_char):]
+    print(f'mod test_str  = {test_str}')
+
+
+
 
 if __name__ == '__main__':
     main()
