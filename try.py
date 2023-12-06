@@ -1,4 +1,4 @@
-
+import re
 
 from operator import itemgetter
 
@@ -87,7 +87,24 @@ def main():
     test_str = test_str[:n] + new_char + test_str[n+len(new_char):]
     print(f'mod test_str  = {test_str}')
 
+    # strip whitespace
+    line = 'aaa bbb  ccc\tddd \t\teee, fff ,,, \tggg;hhh:iii 1.234'
 
+    # fields = line.split([' ', ','])
+    # print(fields)
+
+    # this works
+    pattern = r'[ \s,:;]+'
+    fields = re.split(pattern, line)
+
+    # this works
+    # pattern = r'[ \s,:;]+'
+    # compiled_pattern = re.compile(pattern)
+    # fields = compiled_pattern.findall(line)
+
+
+    print(line)
+    print(fields)
 
 
 if __name__ == '__main__':
