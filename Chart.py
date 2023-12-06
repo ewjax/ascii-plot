@@ -342,14 +342,18 @@ def main():
     #     c.add_datapoint(i, i, '3')
     #     c.add_datapoint(i, -2*i, '4')
 
-    # for i in range(37):
-    #     x = 2*math.pi / 36.0 * i
-    #     y = math.sin(x)
-    #     c.add_datapoint(x, y, '5')
+    for i in range(37):
+        x = 2*math.pi / 36.0 * i
+        y = math.sin(x)
+        c.add_datapoint(x, y, '5')
 
-    for x in range(-10, 21):
-        y = x * x - 100
-        c.add_datapoint(x, y, '6')
+        y = math.cos(x)
+        c.add_datapoint(x, y, '7')
+
+    # for i in range(-10, 21):
+    #     x = i
+    #     y = x * x - 100
+    #     c.add_datapoint(x, y, '6')
 
     c.draw()
 
