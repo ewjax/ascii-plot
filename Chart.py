@@ -1,4 +1,5 @@
 import copy
+import math
 
 
 #
@@ -72,8 +73,8 @@ class Chart:
 
         # create a blank line
         blank_line = ''
-        blank_char = '.'
-        # blank_char = ' '
+        # blank_char = '.'
+        blank_char = ' '
         for i in range(num_cols):
             blank_line += blank_char
 
@@ -115,7 +116,9 @@ class Chart:
 
         # draw_axes()
         self.draw_axes()
+
         # draw each series
+        self.draw_series()
 
         # print them to the screen
         for ll in self.lines:
@@ -226,13 +229,13 @@ class Chart:
 
         # y-min label
         label = f'{self.min_raw[1]:.2E}'
-        self.draw_string(self.plot_offset[0] - len(label),
+        self.draw_string(self.plot_offset[0] - len(label) - 1,
                          self.plot_offset[1] + self.plot_range[1],
                          label)
 
         # y-max label
         label = f'{self.max_raw[1]:.2E}'
-        self.draw_string(self.plot_offset[0] - len(label),
+        self.draw_string(self.plot_offset[0] - len(label) - 1,
                          self.plot_offset[1],
                          label)
 
@@ -286,14 +289,34 @@ class Chart:
                                  axis_horiz_line)
 
         # horiz and vertical axis intersection
-        if ((self.min_raw[1] < 0.0) and
-                (self.max_raw[1] > 0.0) and
-                (self.min_raw[0] < 0.0) and
-                (self.max_raw[0] > 0.0)):
-            axis_center = '+'
+        axis_center = '+'
+        if ((self.min_raw[1] < 0.0)
+                and (self.max_raw[1] > 0.0)
+                and (self.min_raw[0] < 0.0)
+                and (self.max_raw[0] > 0.0)):
             self.draw_string(screen_zero_x,
                              screen_zero_y,
                              axis_center)
+
+    def draw_series(self):
+
+        # walk the list of series
+        for series_id in self.series_dict.keys():
+            series = self.series_dict[series_id]
+
+            # now walk the list of data point
+            # walk the list of datapoints
+            for point in series.point_list:
+                x = point[0]
+                y = point[1]
+
+                (transformed_x, transformed_y) = self.transform(x, y)
+                self.draw_string(transformed_x,
+                                 transformed_y,
+                                 series_id)
+
+
+
 
 
 def main():
@@ -310,8 +333,40 @@ def main():
     # c.add_datapoint(51, 41, '2')
 
     for i in range(-5, 5):
-        c.add_datapoint(i, i)
-        c.add_datapoint(i, -2*i, '2')
+        c.add_datapoint(i, i, '3')
+        c.add_datapoint(i, -2*i, '4')
+
+    for i in range(37):
+        x = 2*math.pi / 36.0 * i
+        y = math.sin(x)
+        c.add_datapoint(x, y, '5')
+
+
+
+    # for ( x = 0; x <= 2*M_PI + 0.05; x += (M_PI_4/4))
+    # {
+    #     plot.SetCurrentGraph(0);
+    #     double y = sin(x);
+    #     plot.AddPoint(x, y);
+    #
+    #     plot.SetCurrentGraph(1);
+    #     y = cos(x);
+    #     plot.AddPoint(x, y);
+    #
+    #     plot.SetCurrentGraph(2);
+    #     y = 2.0 * (1.0 - exp(-1.0 * x));
+    #     plot.AddPoint(x, y);
+    #
+    #     plot.SetCurrentGraph(3);
+    #     y = (2.0 * (1.0 - exp(-1.0 * x))) * cos(x);
+    #     plot.AddPoint(x, y);
+    #
+    #     plot.SetCurrentGraph(4);
+    #     y = -0.5 * x + 3.0;
+    #     plot.AddPoint(0.5*x + 1.0, y);
+    # }
+
+
 
     c.draw()
 
