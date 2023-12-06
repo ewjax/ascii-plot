@@ -91,7 +91,7 @@ class Chart:
         self.xlabel = 'This is the X-Axis Label'
         self.ylabel = 'This is the Y-Axis Label'
 
-    def add_datapoint(self, x: int, y: int, series_id: str = '1') -> None:
+    def add_datapoint(self, x: float, y: float, series_id: str = '1') -> None:
         """
         Add a datapoint to the indicated Series
 
@@ -110,8 +110,10 @@ class Chart:
         s.point_list.append(point)
 
     def draw(self) -> None:
-
-        # find_bounds()
+        """
+        The main drawing routine, which calls each of the sub-pieces in turn
+        """
+        # find_bounds(), determine the X and Y maxima and minima for all series, for use in scaling
         self.find_bounds()
 
         # draw_axes()
@@ -191,8 +193,13 @@ class Chart:
         """
         self.lines[y] = self.lines[y][:x] + the_string + self.lines[y][x + len(the_string):]
 
-    def draw_axes(self):
-
+    def draw_axes(self) -> None:
+        """
+        Draw the basic features of the Chart
+            - Chart title, X-Axis label, Y-Axis Label
+            - numeric values for the max and min X and Y values on the series plots
+            - the lines for the outer borders, and the lines for the X and Y zero axes
+        """
         # do graph title
         # todo - add accessor for title
         self.draw_string(self.plot_offset[0] + round((self.plot_range[0] - len(self.title)) / 2),
@@ -298,8 +305,10 @@ class Chart:
                              screen_zero_y,
                              axis_center)
 
-    def draw_series(self):
-
+    def draw_series(self) -> None:
+        """
+        Walk the list of all series, and plot the datapoints for each onto the Chart
+        """
         # walk the list of series
         for series_id in self.series_dict.keys():
             series = self.series_dict[series_id]
@@ -316,9 +325,6 @@ class Chart:
                                  series_id)
 
 
-
-
-
 def main():
 
     c = Chart()
@@ -332,41 +338,18 @@ def main():
     # c.add_datapoint(31, 61, '2')
     # c.add_datapoint(51, 41, '2')
 
-    for i in range(-5, 5):
-        c.add_datapoint(i, i, '3')
-        c.add_datapoint(i, -2*i, '4')
+    # for i in range(-5, 5):
+    #     c.add_datapoint(i, i, '3')
+    #     c.add_datapoint(i, -2*i, '4')
 
-    for i in range(37):
-        x = 2*math.pi / 36.0 * i
-        y = math.sin(x)
-        c.add_datapoint(x, y, '5')
+    # for i in range(37):
+    #     x = 2*math.pi / 36.0 * i
+    #     y = math.sin(x)
+    #     c.add_datapoint(x, y, '5')
 
-
-
-    # for ( x = 0; x <= 2*M_PI + 0.05; x += (M_PI_4/4))
-    # {
-    #     plot.SetCurrentGraph(0);
-    #     double y = sin(x);
-    #     plot.AddPoint(x, y);
-    #
-    #     plot.SetCurrentGraph(1);
-    #     y = cos(x);
-    #     plot.AddPoint(x, y);
-    #
-    #     plot.SetCurrentGraph(2);
-    #     y = 2.0 * (1.0 - exp(-1.0 * x));
-    #     plot.AddPoint(x, y);
-    #
-    #     plot.SetCurrentGraph(3);
-    #     y = (2.0 * (1.0 - exp(-1.0 * x))) * cos(x);
-    #     plot.AddPoint(x, y);
-    #
-    #     plot.SetCurrentGraph(4);
-    #     y = -0.5 * x + 3.0;
-    #     plot.AddPoint(0.5*x + 1.0, y);
-    # }
-
-
+    for x in range(-10, 21):
+        y = x * x - 100
+        c.add_datapoint(x, y, '6')
 
     c.draw()
 
