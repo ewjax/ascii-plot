@@ -1,4 +1,5 @@
 import re
+import math
 
 from operator import itemgetter
 
@@ -109,6 +110,15 @@ def main():
 
     fields = re.split(pattern, line, maxsplit=1)
     print(fields)
+
+    for i in range(37):
+        x = 2*math.pi / 36.0 * i
+        y = math.sin(x)
+        print(f'{x} {y} 1')
+
+        y = math.cos(x)
+        print(f'{x} {y} 2')
+
 
 
 if __name__ == '__main__':
