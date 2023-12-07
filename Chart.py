@@ -201,19 +201,16 @@ class Chart:
             - the lines for the outer borders, and the lines for the X and Y zero axes
         """
         # do graph title
-        # todo - add accessor for title
         self.draw_string(self.plot_offset[0] + round((self.plot_range[0] - len(self.title)) / 2),
                          self.plot_offset[1] - 2,
                          self.title)
 
         # do x-axis label
-        # todo - add accessor for xlabel
         self.draw_string(self.plot_offset[0] + round((self.plot_range[0] - len(self.xlabel)) / 2),
                          self.plot_offset[1] + self.plot_range[1] + 2,
                          self.xlabel)
 
         # do y-axis label
-        # todo - add accessor for ylabel
         for i in range(len(self.ylabel)):
             plot_char = self.ylabel[i]
             self.draw_string(self.plot_offset[0] - 5,

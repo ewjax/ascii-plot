@@ -6,7 +6,6 @@ from operator import itemgetter
 #
 #
 def main():
-
     point1 = (1, 2)
     point2 = (3, 6)
     point3 = (5, 4)
@@ -25,7 +24,6 @@ def main():
     print(points)
 
     for p in points:
-
         print()
         print(p)
         print(f'first = {p[0]}, second = {p[1]}')
@@ -84,7 +82,7 @@ def main():
     test_str = base_str
     print(f'test_str      = {test_str}')
 
-    test_str = test_str[:n] + new_char + test_str[n+len(new_char):]
+    test_str = test_str[:n] + new_char + test_str[n + len(new_char):]
     print(f'mod test_str  = {test_str}')
 
     # strip whitespace
@@ -102,8 +100,14 @@ def main():
     # compiled_pattern = re.compile(pattern)
     # fields = compiled_pattern.findall(line)
 
-
     print(line)
+    print(fields)
+
+    line = 'xlabel this is a sample label'
+    fields = re.split(pattern, line)
+    print(fields)
+
+    fields = re.split(pattern, line, maxsplit=1)
     print(fields)
 
 
