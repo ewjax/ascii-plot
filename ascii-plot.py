@@ -149,6 +149,7 @@ def input_file_format():
     print('     xlabel      X-Axis Label Text')
     print('     ylabel      Y-Axis Label Text')
     print('     title       Chart Title Text')
+    print('')
 
 
 def main() -> None:
