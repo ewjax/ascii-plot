@@ -4,6 +4,7 @@
 import re
 import textwrap
 import argparse
+import sys
 
 
 import _version
@@ -41,12 +42,22 @@ def process_command_line() -> None:
                             action='version',
                             version=f'Version: {_version.__VERSION__}')
 
-    # todo - need an option to show input file format
+    # show format of input file
+    cli_parser.add_argument('-f', '--format',
+                            help='flag: Show input file data format examples',
+                            action='store_true')
 
     # ----------------------- parse the command line ----------------------
     global args
     args = cli_parser.parse_args()
 
+    # todo - would like this to behave like the -h option, rather than require the user
+    # to also specify the input file
+    #
+    # format flag
+    if args.format:
+        input_file_format()
+        sys.exit(0)
 
 def process_input_file() -> None:
     """
@@ -109,6 +120,35 @@ def process_input_file() -> None:
     # and finally, we get to the payoff
     # tell the chart to draw itself
     the_chart.draw()
+
+
+def input_file_format():
+    print('')
+    print('Generally:')
+    print('     - one line of text per datapoint')
+    print('     - fields separated by whitespace, comma, semicolon, or colon')
+    print('')
+    print('Example for when only one series to be graphed:')
+    print('Enter data in (x, y) pairs (series_id defaults to \'1\')')
+    print('     1.234   5.678')
+    print('     2.345   6.789')
+    print('     etc')
+    print('')
+    print('Example for when multiple series are to be graphed:')
+    print('Enter data in (x, y, series_id) triads (use single number or character for each \'series_id\')')
+    print('     1.234   5.678   1')
+    print('     2.345   6.789   1')
+    print('     3.456   7.890   1')
+    print('     12.345  16.789  2')
+    print('     22.345  26.789  2')
+    print('     32.345  36.789  2')
+    print('     etc')
+    print('')
+    print('Special cases:  If user wishes to provide special labels for X-Axis, Y-Axis, or Chart Title')
+    print('Example: Use \'xlabel\', \'ylabel\', or \'title\' key phrases')
+    print('     xlabel      X-Axis Label Text')
+    print('     ylabel      Y-Axis Label Text')
+    print('     title       Chart Title Text')
 
 
 def main() -> None:
