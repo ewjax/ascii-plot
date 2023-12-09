@@ -1,5 +1,5 @@
 
-PACKAGE=vbump
+PACKAGE=ascii-plot
 
 ##############################################################################
 # do this while not in venv
