@@ -1,6 +1,41 @@
 # ascii-plot
 
-TODO add descriptive text here
+A utility that provides quick and dirty (x, y) plotting visualization from data contained in an input file, using ascii characters to create the plots.
+
+Each line of the input file is assumed to contain a single data point:
+* (x, y) for a single data set (defaults to series_id '1')
+* (x, y, series_id) for multiple data sets
+
+Example for a single series to be graphed (series_id defaults to '1'):
+```commandline
+    1.234   5.678
+    2.345   6.789
+    etc
+```
+
+Example for when multiple series are to be graphed:
+```commandline
+    1.234   5.678   1
+    2.345   6.789   1
+    3.456   7.890   1
+    12.345  16.789  2
+    22.345  26.789  2
+    32.345  36.789  2
+    etc
+```
+The values for x and y (and series_id, if included) can be separated by whitespace, commas, semi-colons, or colons.
+
+For multiple data sets, the value of the 'series_id' should ideally be a single alpha-numeric character.
+
+Special cases:  If user wishes to provide special labels for X-Axis, Y-Axis, or Chart Title
+
+Example:
+```commandline
+    xlabel      X-Axis Label Text
+    ylabel      Y-Axis Label Text
+    title       Chart Title Text
+```
+
 
 
 
