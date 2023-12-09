@@ -1,5 +1,8 @@
 # ascii-plot
 
+TODO add descriptive text here
+
+
 
 ### Build and Installation Steps:
 The ascii-plot utility makes use of a virtual python environment, and creates a standalone executable, which can be copied to a local directory such as /usr/local/bin or similar.
