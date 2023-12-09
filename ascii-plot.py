@@ -38,7 +38,7 @@ def process_command_line() -> None:
 
     # version
     cli_parser.add_argument('-v', '--version',
-                            help='Print version of this utility and exit',
+                            help='flag: Print version of this utility and exit',
                             action='version',
                             version=f'Version: {_version.__VERSION__}')
 
