@@ -113,7 +113,7 @@ def process_input_file() -> None:
             x = float(fields[0])
             y = float(fields[1])
             series_id = fields[2]
-            print(f'x = {x}, y = {y}, series_id = {series_id}')
+            # print(f'x = {x}, y = {y}, series_id = {series_id}')
 
             the_chart.add_datapoint(x, y, series_id)
 

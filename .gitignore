@@ -16,7 +16,7 @@ dist/
 build/
 
 # Environments
-.vbump.venv
+.ascii-plot.venv
 
 # PyCharm64 config files
 .idea/
